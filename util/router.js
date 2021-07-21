@@ -73,6 +73,39 @@ class Router {
       }
     })
   }
+
+  options(subRoute, optionsHandler) {
+    if (subRoute.startsWith('/')) {
+      subRoute = subRoute.slice(1);
+    }
+    this.server.on('request', (req, res) => {
+      if(!this.#baseCheck(req.url)) {
+        return;
+      }
+      if (this.#checkSubRoute(subRoute, req.url) && req.method === Router.HTTP_METHODS.OPTIONS) {
+        res.taken = true;
+
+        optionsHandler(req, res);
+
+      }
+    })
+  }
+
+  delete(subRoute, deleteHandler) {
+    if (subRoute.startsWith('/')) {
+      subRoute = subRoute.slice(1);
+    }
+    this.server.on('request', (req, res) => {
+      if(!this.#baseCheck(req.url)) {
+        return;
+      }
+      if (this.#checkSubRoute(subRoute, req.url) && req.method === Router.HTTP_METHODS.DELETE) {
+        res.taken = true;
+
+        deleteHandler(req, res);
+      }
+    })
+  }
 }
 
 module.exports = Router;

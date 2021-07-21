@@ -20,8 +20,35 @@ function subscribeUserRouter(server) {
     res.statusCode = 200;
     res.end(JSON.stringify(userList));
   });
-  router.post()
-  /// router.del TODO: asd
+  
+  router.post('', (req, res) => {
+    res.statusCode = 200;
+    const newUser = {
+      id: userList.length,
+      ...JSON.parse(req.body)
+    };
+    userList.push(newUser);
+    res.end();
+  });
+
+  router.options('', (req, res) => {
+    const id=req.url.match(/\/\d+$/)[0].slice(1);
+    if (userList.find(user => user.id == id)) {
+      res.statusCode = 200;
+    }
+    res.end();
+  });
+
+  router.delete('', (req, res) => {
+    res.statusCode = 200;
+    const id=req.url.match(/\/\d+$/)[0].slice(1);
+    userList.forEach((user, index) => {
+      if (user.id==id) {
+        userList.splice(index, 1);
+      }
+    });
+    res.end();
+  });
 
 }
 module.exports = {
