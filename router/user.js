@@ -33,9 +33,8 @@ function subscribeUserRouter(server) {
 
   router.options('', (req, res) => {
     const id=req.url.match(/\/\d+$/)[0].slice(1);
-    if (userList.find(user => user.id == id)) {
-      res.statusCode = 200;
-    }
+    res.setHeader("Allow", "GET,POST,DELETE,OPTIONS");
+    res.statusCode = 200;
     res.end();
   });
 
